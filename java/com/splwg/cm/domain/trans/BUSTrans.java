@@ -40,22 +40,24 @@ public class BUSTrans extends BaseTransformer{
 		StringWriter wrt = new StringWriter();
 		StreamResult out = new StreamResult(wrt);
 		try { 
-//			String tmp = doDataRead(src.getReader());
-//  			Document doc = reader.read(new StringReader(tmp));
-//			
-//			XPath pathOfSp = doc.createXPath("/bill/billSegmentList/spList");
-// 			List spList = pathOfSp.selectNodes(doc.getRootElement());
-//			int sizeOfSp = spList.size();
-//			
-//			//每页只显示2个 BillSegment 信息
-//			//不需要分页
-//			if(sizeOfSp <= 2) {
-//				trans1.setParameter("showAlgo", 1); //打印用气金额算法
-//			}
-//			//需要分页
-//			else{
-//				trans1.setParameter("showAlgo", -1); //不打印用气金额算法
-//			} 
+			src.getReader().mark(1000);
+			String tmp = doDataRead(src.getReader());
+			src.getReader().reset();
+  			Document doc = reader.read(new StringReader(tmp));
+			
+			XPath pathOfSp = doc.createXPath("/bill/billSegmentList/spList");
+ 			List spList = pathOfSp.selectNodes(doc.getRootElement());
+			int sizeOfSp = spList.size();
+			
+			//每页只显示2个 BillSegment 信息
+			//不需要分页
+			if(sizeOfSp <= 2) {
+				trans.setParameter("showAlgo", 1); //打印用气金额算法
+			}
+			//需要分页
+			else{
+				trans.setParameter("showAlgo", -1); //不打印用气金额算法
+			} 
 			trans.setParameter("showAdj", -1);
 			trans.transform(data, out);
 			str.append(wrt.toString());
